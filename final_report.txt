@@ -1,0 +1,95 @@
+Project 3: NLP for News Category Classification (Multi-Class)
+Pace University -- Introduction to Deep Learning, Spring 2026
+
+FINAL REPORT
+
+OVERVIEW
+--------
+For this project I built a text classification system that categorizes BBC news
+articles into five categories: business, entertainment, politics, sport, and
+tech. The dataset had 2,225 articles total, pretty evenly spread across all
+five categories. Sport and business had the most articles (511 and 510) and
+entertainment had the fewest (386), but overall the distribution was balanced
+enough that it did not cause any major issues for the models.
+
+The pipeline I built involved cleaning the raw text using NLTK, converting it
+into numerical features using TF-IDF, and then training two models: Logistic
+Regression and a Linear SVM. Both ended up working really well.
+
+MODEL PERFORMANCE
+-----------------
+Both models did better than I expected honestly:
+
+  - Logistic Regression Accuracy: 98.20%
+  - SVM Accuracy:                 98.43%
+
+SVM came out slightly ahead, but the difference was pretty small. I think both
+models did so well because the BBC dataset is clean, balanced, and each
+category tends to use pretty distinct vocabulary. Sports articles sound nothing
+like tech articles, so TF-IDF had an easy time picking up on those differences.
+
+CONFUSION MATRIX ANALYSIS
+--------------------------
+Looking at where the models made mistakes was actually pretty interesting:
+
+- Sport had zero misclassifications on both models, 102 out of 102 correct.
+  That makes sense because sports articles are full of specific terms like
+  player names, team names, and sport-specific language that does not really
+  show up in other categories.
+
+- Tech got mixed up with business a couple of times on both models. That one
+  is pretty understandable since a lot of tech articles are about companies,
+  earnings, and products, which overlaps with business coverage.
+
+- Politics got confused with entertainment twice. This is probably from
+  articles about political figures who also have a public persona, or stories
+  about entertainment industry regulation.
+
+- Entertainment had the fewest articles and one misclassification per model,
+  which made it the trickiest category, though still classified very accurately.
+
+STRENGTHS
+---------
+TF-IDF turned out to be a solid choice for this kind of task. It does a good
+job of weighing words that are important to a specific article while
+downweighting common words that show up everywhere. Both Logistic Regression
+and SVM are also known to work well with the kind of sparse, high-dimensional
+data that TF-IDF produces, so that combination made sense here.
+
+The dataset itself also helped a lot. It is clean, well-labeled, and balanced,
+which gave the models a fair shot at learning each category without being
+biased toward the more common ones.
+
+LIMITATIONS
+-----------
+The biggest limitation is that TF-IDF does not understand meaning, it just
+counts words. So if the same word shows up in two different contexts it gets
+treated the same way regardless. It also does not pick up on word order, so
+the structure of a sentence does not factor in at all.
+
+Another issue is that some articles probably span more than one topic, like a
+story about a tech company getting investigated by the government. Those kinds
+of articles are hard to classify into just one category, and the model has no
+way to handle that.
+
+POTENTIAL IMPROVEMENTS
+----------------------
+The most straightforward improvement would be switching from TF-IDF to word
+embeddings like Word2Vec or GloVe, which actually capture the meaning of words
+rather than just their frequency. Going even further, a model like BERT would
+probably push accuracy very close to 100% on this dataset since it understands
+context much better.
+
+On the evaluation side, using cross-validation instead of a single train-test
+split would give a more reliable picture of how the models actually perform.
+Tuning hyperparameters like the C value in SVM would also be worth trying if
+squeezing out a bit more performance was the goal.
+
+CONCLUSION
+----------
+Overall I am happy with how this project turned out. Both models hit nearly
+perfect accuracy, with SVM edging out Logistic Regression by a small margin.
+It was a good reminder that you do not always need a complex model to get
+strong results. With clean data, solid preprocessing, and the right feature
+extraction method, even simpler models like Logistic Regression can perform
+really well on text classification tasks.
